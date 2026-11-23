@@ -1,0 +1,6 @@
+name: Ping Public API
+description: Returns service health and basic system status
+method: GET
+url: ${BASE_URL}/api/public/ping
+headers:
+  Accept: application/json

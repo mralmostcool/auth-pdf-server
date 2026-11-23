@@ -1,0 +1,6 @@
+name: Health Check (Actuator)
+description: Check health status of Spring Boot backend, DB, and Redis
+method: GET
+url: ${BASE_URL}/actuator/health
+headers:
+  Accept: application/json

@@ -7,14 +7,20 @@
 
 ## 2. Port Allocation Rules
 Only the following port ranges are allowed for services in this project:
-- **Port 7001**: Reserved / Primary Backend Service (e.g., Spring Boot application).
-- **Port 7002**: Reserved (e.g., Frontend dev server or secondary service).
-- **Port 7003+**: Allowed for additional services, databases, or support containers (e.g., PostgreSQL, Redis, Mailhog, mock servers, etc.).
-- **Rule**: Never bind or expose ports outside `7001, 7002, 7003+` (e.g., standard ports like 8080, 3000, 5432 should be mapped to the `7001+` range in `docker-compose.yml` or local configurations).
+- **Port 7001**: Reserved / Primary Backend Service (Spring Boot application).
+- **Port 7002**: Reserved (Frontend dev server or secondary service).
+- **Port 7003+**: Allowed for auxiliary services and containers (PostgreSQL: 7003, Redis: 7004, etc.).
+- **Rule**: Never bind or expose ports outside `7001, 7002, 7003+`. Map default container ports to these allocated ports.
 
 ## 3. Architecture & Tech Stack Guidelines
 - **Architecture**: Full-stack application.
-- **Backend**: Java Spring Boot. Follow standard Spring Boot project layout, idiomatic conventions, and clean architecture (controllers, services, repositories, DTOs).
-- **Frontend**: Currently undefined. When initialized, it should integrate cleanly with the backend APIs and follow standard modern frontend tooling.
-- **Orchestration**: Everything else (databases, caches, third-party mock services, dependencies) must be controlled and orchestrated via `docker-compose.yml`.
-- All environment variables and port mappings for containerized services must respect the assigned port rules.
+- **Backend**: Java Spring Boot 4.x (Java 21 LTS). Follow modular, clean architecture with Spring Modulith, JPA, Flyway, and Spring Security.
+- **Frontend**: Currently undefined.
+- **Orchestration**: Everything is orchestrated via `docker-compose.yml` with central environment variables stored in `.env` and `.env.example`.
+
+## 4. API Testing with `posting`
+- We use **`posting`** (the terminal TUI HTTP client) for interactive endpoint testing and manual verification.
+- **Location**: Store posting requests and collections inside the `posting/` folder in the project root.
+- **Request Files**: Organize endpoints by module or domain using human-readable `.posting.yaml` format (e.g. `posting/<module>/<request-name>.posting.yaml`).
+- **Environment**: Maintain a posting environment file `posting/.env` (or `posting/local.env`) referencing `BASE_URL=http://localhost:7001` so that requests can be executed directly with `posting --collection ./posting`.
+- Whenever new endpoints are created or modified in the backend, corresponding `.posting.yaml` request files must be created or updated.
