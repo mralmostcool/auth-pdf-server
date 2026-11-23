@@ -1,0 +1,25 @@
+# Environment files
+.env
+.env.local
+.env.*.local
+
+# Persistent container data directories
+data/
+data/postgres/
+data/redis/
+
+# IDE & Editor files
+.idea/
+.vscode/
+*.iml
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts (for Java / future frontend)
+target/
+build/
+node_modules/
+dist/
+*.log
