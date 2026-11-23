@@ -18,9 +18,12 @@ Only the following port ranges are allowed for services in this project:
 - **Frontend**: Currently undefined.
 - **Orchestration**: Everything is orchestrated via `docker-compose.yml` with central environment variables stored in `.env` and `.env.example`.
 
-## 4. API Testing with `posting`
+## 4. API Testing with `posting` (`posting-cli/`)
 - We use **`posting`** (the terminal TUI HTTP client) for interactive endpoint testing and manual verification.
-- **Location**: Store posting requests and collections inside the `posting/` folder in the project root.
-- **Request Files**: Organize endpoints by module or domain using human-readable `.posting.yaml` format (e.g. `posting/<module>/<request-name>.posting.yaml`).
-- **Environment**: Maintain a posting environment file `posting/.env` (or `posting/local.env`) referencing `BASE_URL=http://localhost:7001` so that requests can be executed directly with `posting --collection ./posting`.
-- Whenever new endpoints are created or modified in the backend, corresponding `.posting.yaml` request files must be created or updated.
+- **Location**: Store posting requests and collections inside the `posting-cli/` folder in the project root.
+- **Route-Based Hierarchy**: Request files must mirror the actual URL paths:
+  - Example: route `/api/public/ping` -> file `posting-cli/api/public/ping.posting.yaml`
+  - Example: route `/actuator/health` -> file `posting-cli/actuator/health.posting.yaml`
+  - Example: route `/v3/api-docs` -> file `posting-cli/v3/api-docs.posting.yaml`
+- **Environment**: Maintain a posting environment file `posting-cli/.env` referencing `BASE_URL=http://localhost:7001` so that requests can be executed directly with `posting --collection ./posting-cli`.
+- Whenever new endpoints are created or modified in the backend, corresponding `.posting.yaml` request files must be created or updated within matching folder hierarchy.

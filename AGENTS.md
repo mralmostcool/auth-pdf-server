@@ -9,7 +9,7 @@
   - **Backend**: Java Spring Boot 4.x (Java 21).
   - **Frontend**: Currently undefined (to be selected/added later).
   - **Infrastructure & Dependencies**: Controlled by Docker Compose (`docker-compose.yml`).
-  - **API Testing**: `posting` TUI HTTP client using collections stored in `./posting`.
+  - **API Testing**: `posting` TUI HTTP client using collections stored hierarchically in `./posting-cli/`.
 
 ## Port Allocation Rules
 - Permitted ports: **7001, 7002, 7003 onwards**.
@@ -18,7 +18,10 @@
   - **7003+**: Supporting services (Database: 7003, Redis: 7004, etc. in Docker Compose)
 - Do NOT use standard default ports (such as 8080, 3000, 5432) for host bindings; map them to `7001`, `7002`, `7003+`.
 
-## API Testing with Posting
-- All endpoint requests are organized into declarative YAML files inside `./posting/`.
-- Maintain requests structured by domain or tag (e.g. `posting/public/ping.posting.yaml`, `posting/actuator/...`).
-- Run interactive testing using: `posting --collection ./posting`.
+## API Testing with Posting CLI
+- All endpoint requests are organized into declarative YAML files inside `./posting-cli/`.
+- Maintain requests structured hierarchically to mirror route paths:
+  - `posting-cli/api/public/ping.posting.yaml` for `/api/public/ping`
+  - `posting-cli/actuator/health.posting.yaml` for `/actuator/health`
+  - `posting-cli/v3/api-docs.posting.yaml` for `/v3/api-docs`
+- Run interactive testing using: `posting --collection ./posting-cli`.
