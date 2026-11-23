@@ -1,0 +1,54 @@
+server:
+  port: ${SERVER_PORT:7001}
+
+spring:
+  application:
+    name: pdfserver
+
+  datasource:
+    url: jdbc:postgresql://${POSTGRES_HOST:localhost}:${POSTGRES_PORT:7003}/${POSTGRES_DB:auth_pdf_db}
+    username: ${POSTGRES_USER:mrcool}
+    password: ${POSTGRES_PASSWORD:StrongPassword!123}
+    driver-class-name: org.postgresql.Driver
+
+  jpa:
+    hibernate:
+      ddl-auto: validate
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+
+  flyway:
+    enabled: true
+    locations: classpath:db/migration
+
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:7004}
+      password: ${REDIS_PASSWORD:}
+
+  docker:
+    compose:
+      enabled: false
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
+  endpoint:
+    health:
+      show-details: always
+
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+
+scalar:
+  path: /scalar
+  enabled: true
