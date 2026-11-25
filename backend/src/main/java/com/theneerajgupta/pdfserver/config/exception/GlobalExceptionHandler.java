@@ -216,6 +216,6 @@ public class GlobalExceptionHandler {
             request.getRequestURI(),
             getCorrelationId()
         );
-        return new ResponseEntity<>(body, status);
+        return ResponseEntity.status(status).body(body);
     }
 }
