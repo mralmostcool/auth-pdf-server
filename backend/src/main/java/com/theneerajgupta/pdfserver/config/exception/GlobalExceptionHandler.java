@@ -1,7 +1,6 @@
 package com.theneerajgupta.pdfserver.config.exception;
 
 import com.theneerajgupta.pdfserver.config.logger.CorrelationIdFilter;
-import com.theneerajgupta.pdfserver.exception.AppException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.ConstraintViolationException;
 import org.slf4j.Logger;

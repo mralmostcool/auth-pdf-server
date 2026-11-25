@@ -1,4 +1,4 @@
-package com.theneerajgupta.pdfserver.exception;
+package com.theneerajgupta.pdfserver.config.exception;
 
 import org.springframework.http.HttpStatus;
 

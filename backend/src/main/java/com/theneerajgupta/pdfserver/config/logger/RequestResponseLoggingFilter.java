@@ -23,7 +23,6 @@ import java.util.Collections;
 import java.util.Enumeration;
 import java.util.LinkedHashMap;
 import java.util.Map;
-import java.util.stream.Collectors;
 
 @Component
 @Order(Ordered.HIGHEST_PRECEDENCE + 1)
@@ -34,7 +33,8 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
 
     private final RequestMappingHandlerMapping handlerMapping;
 
-    public RequestResponseLoggingFilter(@Qualifier("requestMappingHandlerMapping") RequestMappingHandlerMapping handlerMapping) {
+    public RequestResponseLoggingFilter(
+            @Qualifier("requestMappingHandlerMapping") RequestMappingHandlerMapping handlerMapping) {
         this.handlerMapping = handlerMapping;
     }
 
@@ -42,18 +42,18 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
     protected boolean shouldNotFilter(HttpServletRequest request) {
         String path = request.getRequestURI();
         return path.startsWith("/actuator") ||
-               path.startsWith("/swagger-ui") ||
-               path.startsWith("/v3/api-docs") ||
-               path.startsWith("/scalar") ||
-               path.endsWith(".css") ||
-               path.endsWith(".js") ||
-               path.endsWith(".ico");
+                path.startsWith("/swagger-ui") ||
+                path.startsWith("/v3/api-docs") ||
+                path.startsWith("/scalar") ||
+                path.endsWith(".css") ||
+                path.endsWith(".js") ||
+                path.endsWith(".ico");
     }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,
-                                    HttpServletResponse response,
-                                    FilterChain filterChain) throws ServletException, IOException {
+            HttpServletResponse response,
+            FilterChain filterChain) throws ServletException, IOException {
         long startTime = System.currentTimeMillis();
 
         ContentCachingRequestWrapper wrappedRequest = new ContentCachingRequestWrapper(request, MAX_PAYLOAD_LENGTH);
@@ -69,8 +69,8 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
     }
 
     private void logSummary(ContentCachingRequestWrapper request,
-                            ContentCachingResponseWrapper response,
-                            long duration) {
+            ContentCachingResponseWrapper response,
+            long duration) {
         String controllerInfo = resolveControllerInfo(request);
         String method = request.getMethod();
         String uri = request.getRequestURI();
@@ -82,16 +82,16 @@ public class RequestResponseLoggingFilter extends OncePerRequestFilter {
         String responseBody = getPayload(response.getContentAsByteArray(), response.getCharacterEncoding());
 
         String summary = "\n" +
-            "============================== [HTTP TRANSACTION SUMMARY] ==============================\n" +
-            " Controller  : " + controllerInfo + "\n" +
-            " Endpoint    : " + method + " " + uri + queryString + "\n" +
-            " Status      : " + status + " (" + duration + " ms)\n" +
-            "---------------------------------- [PACKET RECEIVED] -----------------------------------\n" +
-            " Headers     : " + requestHeaders + "\n" +
-            " Body        : " + requestBody + "\n" +
-            "----------------------------------- [RESPONSE SENT] ------------------------------------\n" +
-            " Body        : " + responseBody + "\n" +
-            "========================================================================================";
+                "============================== [HTTP TRANSACTION SUMMARY] ==============================\n" +
+                " Controller  : " + controllerInfo + "\n" +
+                " Endpoint    : " + method + " " + uri + queryString + "\n" +
+                " Status      : " + status + " (" + duration + " ms)\n" +
+                "---------------------------------- [PACKET RECEIVED] -----------------------------------\n" +
+                " Headers     : " + requestHeaders + "\n" +
+                " Body        : " + requestBody + "\n" +
+                "----------------------------------- [RESPONSE SENT] ------------------------------------\n" +
+                " Body        : " + responseBody + "\n" +
+                "========================================================================================";
 
         if (status >= 500) {
             log.error(summary);
