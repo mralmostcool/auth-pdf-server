@@ -1,0 +1,6 @@
+name: Root PDF Endpoint
+description: Root endpoint for PDF operations
+method: GET
+url: ${BASE_URL}/api/pdf
+headers:
+  Accept: application/json

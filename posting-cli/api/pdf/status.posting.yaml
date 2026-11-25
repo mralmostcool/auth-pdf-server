@@ -1,0 +1,6 @@
+name: PDF Module Status
+description: Returns status of PDF module
+method: GET
+url: ${BASE_URL}/api/pdf/status
+headers:
+  Accept: application/json
