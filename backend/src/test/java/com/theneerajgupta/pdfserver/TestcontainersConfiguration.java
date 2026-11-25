@@ -12,12 +12,14 @@ class TestcontainersConfiguration {
 
 	@Bean
 	@ServiceConnection
+	@SuppressWarnings("resource")
 	PostgreSQLContainer postgresContainer() {
 		return new PostgreSQLContainer(DockerImageName.parse("postgres:latest"));
 	}
 
 	@Bean
 	@ServiceConnection(name = "redis")
+	@SuppressWarnings("resource")
 	GenericContainer<?> redisContainer() {
 		return new GenericContainer<>(DockerImageName.parse("redis:latest")).withExposedPorts(6379);
 	}
