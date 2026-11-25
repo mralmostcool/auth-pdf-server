@@ -57,3 +57,8 @@ springdoc:
 scalar:
   path: /scalar
   enabled: true
+  url: /v3/api-docs
+  page-title: Auth & PDF Server - Scalar API Reference
+  theme: deepSpace
+  layout: modern
+  show-sidebar: true

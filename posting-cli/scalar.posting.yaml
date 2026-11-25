@@ -1,0 +1,6 @@
+name: Scalar API Reference
+description: Scalar interactive API reference UI
+method: GET
+url: ${BASE_URL}/scalar
+headers:
+  Accept: text/html
