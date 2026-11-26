@@ -89,4 +89,20 @@ class PdfServiceImpl implements PdfService {
                 InputStream stream = storageService.downloadFile(entity.getStorageKey());
                 return new InputStreamResource(stream);
         }
+
+        @Override
+        @Transactional(readOnly = true)
+        public org.springframework.data.domain.Page<PdfDocumentResponse> getPdfDocuments(org.springframework.data.domain.Pageable pageable) {
+                return repository.findAll(pageable)
+                                .map(entity -> new PdfDocumentResponse(
+                                                entity.getId(),
+                                                entity.getTitle(),
+                                                entity.getStorageKey(),
+                                                entity.getBucketName(),
+                                                entity.getFileSize(),
+                                                entity.getContentType(),
+                                                entity.getPageFormat(),
+                                                storageService.getPresignedDownloadUrl(entity.getStorageKey(), 30),
+                                                entity.getCreatedAt()));
+        }
 }

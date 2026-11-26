@@ -4,6 +4,8 @@ import com.theneerajgupta.pdfserver.pdf.dto.GeneratePdfRequest;
 import com.theneerajgupta.pdfserver.pdf.dto.PdfDocumentResponse;
 import com.theneerajgupta.pdfserver.pdf.dto.PdfStatusResponse;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.UUID;
 
@@ -11,4 +13,5 @@ public interface PdfService {
     PdfStatusResponse getStatus();
     PdfDocumentResponse createAndStorePdf(GeneratePdfRequest request);
     Resource getPdfResource(UUID id);
+    Page<PdfDocumentResponse> getPdfDocuments(Pageable pageable);
 }

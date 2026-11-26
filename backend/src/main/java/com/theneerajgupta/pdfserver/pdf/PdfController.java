@@ -8,6 +8,10 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.core.io.Resource;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -30,6 +34,13 @@ public class PdfController {
 
     public PdfController(PdfService pdfService) {
         this.pdfService = pdfService;
+    }
+
+    @GetMapping
+    @Operation(summary = "List generated PDFs", description = "Returns a paginated list of generated PDF documents")
+    public ResponseEntity<Page<PdfDocumentResponse>> listPdfs(
+            @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
+        return ResponseEntity.ok(pdfService.getPdfDocuments(pageable));
     }
 
     @GetMapping("/status")

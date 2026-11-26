@@ -1,6 +1,10 @@
-name: Root PDF Endpoint
-description: Root endpoint for PDF operations
+name: List PDFs
+description: Paginated list of generated PDF documents
 method: GET
 url: ${BASE_URL}/api/pdf
+params:
+  page: 0
+  size: 10
+  sort: createdAt,desc
 headers:
   Accept: application/json
