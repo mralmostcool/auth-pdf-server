@@ -1,0 +1,6 @@
+name: Download PDF Document
+description: Streams the generated PDF binary from MinIO by document UUID
+method: GET
+url: ${BASE_URL}/api/pdf/${DOCUMENT_ID}/download
+headers:
+  Accept: application/pdf

@@ -32,6 +32,7 @@
 		<springdoc.version>3.2.1</springdoc.version>
 		<jjwt.version>0.12.6</jjwt.version>
 		<openpdf.version>2.0.3</openpdf.version>
+		<minio.version>8.5.14</minio.version>
 	</properties>
 	<dependencies>
 		<dependency>
@@ -55,6 +56,11 @@
 			<groupId>com.github.librepdf</groupId>
 			<artifactId>openpdf</artifactId>
 			<version>${openpdf.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>io.minio</groupId>
+			<artifactId>minio</artifactId>
+			<version>${minio.version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

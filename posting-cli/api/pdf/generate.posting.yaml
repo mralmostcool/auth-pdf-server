@@ -1,0 +1,13 @@
+name: Generate A4 PDF Document
+description: Generates an A4 PDF from text, uploads to MinIO bucket, and stores record in Postgres
+method: POST
+url: ${BASE_URL}/api/pdf/generate
+headers:
+  Content-Type: application/json
+  Accept: application/json
+body:
+  content: |
+    {
+      "title": "Sample A4 Report",
+      "text": "This is a sample document generated with OpenPDF and stored directly in MinIO S3 datastore."
+    }
