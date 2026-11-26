@@ -6,6 +6,7 @@ import io.minio.GetPresignedObjectUrlArgs;
 import io.minio.MakeBucketArgs;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
+import io.minio.RemoveObjectArgs;
 import io.minio.http.Method;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -64,6 +65,20 @@ public class MinioStorageService {
         } catch (Exception e) {
             log.error("Failed to download object {} from MinIO: {}", key, e.getMessage(), e);
             throw new RuntimeException("MinIO download failure: " + e.getMessage(), e);
+        }
+    }
+
+    public void deleteFile(String key) {
+        try {
+            minioClient.removeObject(
+                RemoveObjectArgs.builder()
+                    .bucket(bucketName)
+                    .object(key)
+                    .build()
+            );
+        } catch (Exception e) {
+            log.error("Failed to delete object {} from MinIO bucket {}: {}", key, bucketName, e.getMessage(), e);
+            throw new RuntimeException("MinIO delete failure: " + e.getMessage(), e);
         }
     }
 

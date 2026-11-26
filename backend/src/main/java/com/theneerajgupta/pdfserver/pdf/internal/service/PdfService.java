@@ -14,4 +14,5 @@ public interface PdfService {
     PdfDocumentResponse createAndStorePdf(GeneratePdfRequest request);
     Resource getPdfResource(UUID id);
     Page<PdfDocumentResponse> getPdfDocuments(Pageable pageable);
+    void deletePdf(UUID id);
 }

@@ -1,0 +1,4 @@
+name: Delete PDF Document
+description: Deletes PDF binary from MinIO storage and metadata from database
+method: DELETE
+url: ${BASE_URL}/api/pdf/${DOCUMENT_ID}

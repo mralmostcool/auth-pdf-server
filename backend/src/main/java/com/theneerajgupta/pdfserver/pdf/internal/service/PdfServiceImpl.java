@@ -105,4 +105,15 @@ class PdfServiceImpl implements PdfService {
                                                 storageService.getPresignedDownloadUrl(entity.getStorageKey(), 30),
                                                 entity.getCreatedAt()));
         }
+
+        @Override
+        @Transactional
+        public void deletePdf(UUID id) {
+                PdfDocumentEntity entity = repository.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "PDF document not found with id: " + id));
+
+                storageService.deleteFile(entity.getStorageKey());
+                repository.delete(entity);
+        }
 }
