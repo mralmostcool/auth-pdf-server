@@ -18,76 +18,75 @@ import java.util.UUID;
 @Service
 class PdfServiceImpl implements PdfService {
 
-    private final OpenPdfGenerator pdfGenerator;
-    private final MinioStorageService storageService;
-    private final PdfDocumentRepository repository;
+        private final OpenPdfGenerator pdfGenerator;
+        private final MinioStorageService storageService;
+        private final PdfDocumentRepository repository;
 
-    public PdfServiceImpl(OpenPdfGenerator pdfGenerator,
-                          MinioStorageService storageService,
-                          PdfDocumentRepository repository) {
-        this.pdfGenerator = pdfGenerator;
-        this.storageService = storageService;
-        this.repository = repository;
-    }
+        public PdfServiceImpl(OpenPdfGenerator pdfGenerator,
+                        MinioStorageService storageService,
+                        PdfDocumentRepository repository) {
+                this.pdfGenerator = pdfGenerator;
+                this.storageService = storageService;
+                this.repository = repository;
+        }
 
-    @Override
-    public PdfStatusResponse getStatus() {
-        return new PdfStatusResponse(
-            "PDF modulith service active with MinIO datastore",
-            "UP",
-            Instant.now()
-        );
-    }
+        @Override
+        public PdfStatusResponse getStatus() {
+                return new PdfStatusResponse(
+                                "PDF modulith service active with MinIO datastore",
+                                "UP",
+                                Instant.now());
+        }
 
-    @Override
-    @Transactional
-    public PdfDocumentResponse createAndStorePdf(GeneratePdfRequest request) {
-        UUID documentId = UUID.randomUUID();
-        String title = request.title() != null && !request.title().isBlank()
-            ? request.title()
-            : "Untitled Document";
+        @Override
+        @Transactional
+        public PdfDocumentResponse createAndStorePdf(GeneratePdfRequest request) {
+                UUID documentId = UUID.randomUUID();
+                String title = request.title() != null && !request.title().isBlank()
+                                ? request.title()
+                                : "Untitled Document";
 
-        byte[] pdfBytes = pdfGenerator.generateA4Document(title, request.text());
-        String storageKey = "documents/" + documentId + ".pdf";
-        String contentType = "application/pdf";
+                byte[] pdfBytes = pdfGenerator.generateA4Document(title, request.text());
+                String storageKey = "documents/" + documentId + ".pdf";
+                String contentType = "application/pdf";
 
-        storageService.uploadFile(storageKey, pdfBytes, contentType);
+                storageService.uploadFile(storageKey, pdfBytes, contentType);
 
-        PdfDocumentEntity entity = PdfDocumentEntity.builder()
-            .id(documentId)
-            .title(title)
-            .storageKey(storageKey)
-            .bucketName(storageService.getBucketName())
-            .fileSize((long) pdfBytes.length)
-            .contentType(contentType)
-            .pageFormat("A4")
-            .createdAt(Instant.now())
-            .build();
+                PdfDocumentEntity entity = PdfDocumentEntity.builder()
+                                .id(documentId)
+                                .title(title)
+                                .storageKey(storageKey)
+                                .bucketName(storageService.getBucketName())
+                                .fileSize((long) pdfBytes.length)
+                                .contentType(contentType)
+                                .pageFormat("A4")
+                                .createdAt(Instant.now())
+                                .build();
 
-        repository.save(entity);
+                repository.save(entity);
 
-        String downloadUrl = storageService.getPresignedDownloadUrl(storageKey, 30);
+                String downloadUrl = storageService.getPresignedDownloadUrl(storageKey, 30);
 
-        return new PdfDocumentResponse(
-            entity.getId(),
-            entity.getTitle(),
-            entity.getStorageKey(),
-            entity.getBucketName(),
-            entity.getFileSize(),
-            entity.getContentType(),
-            entity.getPageFormat(),
-            downloadUrl,
-            entity.getCreatedAt()
-        );
-    }
+                return new PdfDocumentResponse(
+                                entity.getId(),
+                                entity.getTitle(),
+                                entity.getStorageKey(),
+                                entity.getBucketName(),
+                                entity.getFileSize(),
+                                entity.getContentType(),
+                                entity.getPageFormat(),
+                                downloadUrl,
+                                entity.getCreatedAt());
+        }
 
-    @Override
-    @Transactional(readOnly = true)
-    public Resource getPdfResource(UUID id) {
-        PdfDocumentEntity entity = repository.findById(id)
-            .orElseThrow(() -> new ResourceNotFoundException("PDF document not found with id: " + id));
+        @Override
+        @Transactional(readOnly = true)
+        public Resource getPdfResource(UUID id) {
+                PdfDocumentEntity entity = repository.findById(id)
+                                .orElseThrow(() -> new ResourceNotFoundException(
+                                                "PDF document not found with id: " + id));
 
-        InputStream stream = storageService.downloadFile(entity.getStorageKey());
-        return new InputStreamResource(stream);
-    }
+                InputStream stream = storageService.downloadFile(entity.getStorageKey());
+                return new InputStreamResource(stream);
+        }
 }
